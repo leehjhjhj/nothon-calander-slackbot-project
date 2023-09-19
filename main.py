@@ -1,18 +1,11 @@
 from fastapi import FastAPI, Depends
-from test import read_database
+from service.read_calander import read_database
 from decouple import config
-
+from service.save_meeting_facade import save_meeting_facade
 app = FastAPI()
 
-token = config('NOTION_TOKEN')
-database_id = config('NOTION_DATABASE_ID')
-headers = {
-    "Authorization": "Bearer " + token,
-    "Content-Type": "application/json",
-    "Notion-Version": "2022-02-22"
-}
 
 @app.get("/")
-async def root():
-    res = read_database(database_id, headers)
-    return res
+async def scan_calendar():
+    save_meeting_facade()
+    return True
