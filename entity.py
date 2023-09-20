@@ -10,8 +10,7 @@ class StatusChoice(enum.Enum):
 class Notion(Base):
     __tablename__ = "notion"
 
-    id = Column(Integer, primary_key=True)
-    page_id = Column(String(128), nullable=False)
+    page_id = Column(String(128), primary_key=True)
     status = Column(Enum(StatusChoice), nullable=False)
     time = Column(DateTime, nullable=False, default=datetime.utcnow)
     meeting_type = Column(String(64), nullable=False)
