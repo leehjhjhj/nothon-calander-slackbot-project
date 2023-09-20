@@ -13,4 +13,4 @@ class MeetingRepository:
         self.db.commit()
 
     def get_all_meeting_ids(self):
-       return [m.id for m in self.db.query(Notion).all()]
+       return [m.page_id for m in self.db.query(Notion).all()]

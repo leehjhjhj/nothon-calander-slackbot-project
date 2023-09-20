@@ -1,6 +1,7 @@
 from .read_calander import read_notion_database
 from .farthing import farthing_calender_data
 from .check_meeting_id import check_meeting_id
+from .worker_facade_service import worker_facade
 from persistance.meeting_repository import MeetingRepository
 from database import SessionLocal
 
@@ -20,4 +21,6 @@ def save_meeting_facade():
             except:
                 print("저장 오류")
         else:
-            pass
+            print("ㅋㅋ")
+            worker_facade(meeting)
+            repo.add_meeting(meeting)

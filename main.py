@@ -1,12 +1,11 @@
-from fastapi import FastAPI, Depends
-from service.read_calander import read_database
-from decouple import config
-from service.save_meeting_facade import save_meeting_facade
+from fastapi import FastAPI
+from service.read_calander import read_notion_database
+
 
 app = FastAPI()
 
 
 @app.get("/")
 async def scan_calendar():
-    save_meeting_facade()
-    return True
+    data = read_notion_database()
+    return data
