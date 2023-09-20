@@ -1,7 +1,7 @@
 import requests
 from decouple import config
 
-def read_database():
+def read_notion_database():
     token = config('NOTION_TOKEN')
     database_id = config('NOTION_DATABASE_ID')
     headers = {
