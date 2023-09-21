@@ -14,8 +14,9 @@ def schedule_one_day_before(**kwargs):
     time = kwargs.get('time')
     name = kwargs.get('name')
     meeting_url = kwargs.get('meeting_url')
-
-    message = f"{time}에 {name} 회의가 예정되어있어요! 잊지 마세요.\n 회의 노션페이지: {meeting_url}"
+    meeting_type = kwargs.get('meeting_type')
+    
+    message = f"{time}에 {name} 회의가 예정되어있어요! 잊지 마세요.\n회의 타입: {meeting_type}\n 회의 노션페이지: {meeting_url}"
    
     if check_status(page_id):
         slack.send_message(message)
