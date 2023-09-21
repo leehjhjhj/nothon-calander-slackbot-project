@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from service.read_calander import read_notion_database
 
-
 app = FastAPI()
 
 

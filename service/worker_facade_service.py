@@ -7,6 +7,7 @@ def worker_facade(meeting):
         "time": meeting.time,
         "meeting_url" : meeting.meeting_url,
         "name" : meeting.name,
+        "meeting_type": meeting.meeting_type,
     }
     reminder_time_one_day = meeting.time - timedelta(days=1)
     reminder_time_ten_minutes = meeting.time - timedelta(minutes=10)

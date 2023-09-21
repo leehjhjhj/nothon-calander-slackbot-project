@@ -12,7 +12,6 @@ def save_meeting_facade():
     results = data.get('results')
     list_meeting_ids = repo.get_all_meeting_ids()
     set_meeting_ids = set(list_meeting_ids)
-
     for result in results:
         meeting = farthing_calender_data(result)
         if check_meeting_id(meeting.page_id, set_meeting_ids):
@@ -21,6 +20,5 @@ def save_meeting_facade():
             except:
                 print("저장 오류")
         else:
-            print("ㅋㅋ")
             worker_facade(meeting)
             repo.add_meeting(meeting)

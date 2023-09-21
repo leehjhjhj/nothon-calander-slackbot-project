@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from entity import Notion
+
 class MeetingRepository:
     def __init__(self, db: Session):
         self.db = db
@@ -14,3 +15,7 @@ class MeetingRepository:
 
     def get_all_meeting_ids(self):
        return [m.page_id for m in self.db.query(Notion).all()]
+    
+    def find_meeting_by_page_id(self, page_id):
+        result = self.db.query(Notion).filter_by(page_id=page_id).first()
+        return result
