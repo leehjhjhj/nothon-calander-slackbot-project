@@ -1,9 +1,9 @@
 import requests
 from decouple import config
 
-def read_notion_database():
+def read_notion_database(notion_database_id):
     token = config('NOTION_TOKEN')
-    database_id = config('NOTION_DATABASE_ID')
+    database_id = notion_database_id
     headers = {
         "Authorization": "Bearer " + token,
         "Content-Type": "application/json",

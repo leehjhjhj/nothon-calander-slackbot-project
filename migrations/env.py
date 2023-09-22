@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from database import Base
-from entity import Notion, StatusChoice
+from entity import Notion, StatusChoice, NotionSlackMapping
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

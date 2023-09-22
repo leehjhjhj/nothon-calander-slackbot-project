@@ -4,30 +4,34 @@ from .worker_facade_service import worker_facade
 from .check_meeting import check_meeting_id, check_meeting_time
 
 from persistance.meeting_repository import MeetingRepository
-from database import SessionLocal
+from persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
+from database import get_db
 
-repo = MeetingRepository(db=SessionLocal())
-
+meeting_repo = MeetingRepository(db=get_db())
+notion_slack_mapping_repo = NotionSlackMappingRepository(db=get_db())
 
 
 def save_meeting_facade():
-    data = read_notion_database()
-    results = data.get('results')
+    notion_database_ids = notion_slack_mapping_repo.get_all_database_ids()
 
-    list_meeting_ids = repo.get_all_meeting_ids()
-    set_meeting_ids = set(list_meeting_ids)
+    for notion_database_id in notion_database_ids:
+        data = read_notion_database(notion_database_id)
+        results = data.get('results')
 
-    for result in results:
-        meeting = farthing_calender_data(result)
-        if check_meeting_time(meeting.time):
-            if check_meeting_id(meeting.page_id, set_meeting_ids):
-                try:
-                    repo.merge_meeting(meeting)
-                except:
-                    print("저장 오류")
-            else:
-                worker_facade(meeting)
-                try:
-                    repo.add_meeting(meeting)
-                except:
-                    print("저장 오류")
+        list_meeting_ids = meeting_repo.get_all_meeting_ids(notion_database_id)
+        set_meeting_ids = set(list_meeting_ids)
+
+        for result in results:
+            meeting = farthing_calender_data(result)
+            if check_meeting_time(meeting.time):
+                if check_meeting_id(meeting.page_id, set_meeting_ids):
+                    try:
+                        meeting_repo.merge_meeting(meeting)
+                    except:
+                        print("저장 오류")
+                else:
+                    worker_facade(meeting)
+                    try:
+                        meeting_repo.add_meeting(meeting)
+                    except:
+                        print("저장 오류")

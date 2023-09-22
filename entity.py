@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Enum
+from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey, PrimaryKeyConstraint, UniqueConstraint
 from database import Base
 from datetime import datetime
 import enum
@@ -11,8 +11,17 @@ class Notion(Base):
     __tablename__ = "notion"
 
     page_id = Column(String(128), primary_key=True)
+    notion_database_id = Column(String(128), nullable=False)
     status = Column(Enum(StatusChoice), nullable=False)
     time = Column(DateTime, nullable=False, default=datetime.utcnow)
     meeting_type = Column(String(64), nullable=False)
     meeting_url = Column(String(512), nullable=False)
     name = Column(String(64), nullable=False)
+
+class NotionSlackMapping(Base):
+    __tablename__ = "notionslackmapping"
+
+    id = Column(Integer, primary_key=True)
+    notion_database_id=Column(String(128), nullable=False)
+    slack_channel_id=Column(String(128), nullable=False)
+
