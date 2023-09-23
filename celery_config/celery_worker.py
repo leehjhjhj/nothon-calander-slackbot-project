@@ -3,9 +3,9 @@ from decouple import config
 from .send_message import SendToSlackAPI
 from .check_cancel import check_status
 from persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
-from database import get_db
+from database import SessionLocal
 
-notion_slack_mapping_repo = NotionSlackMappingRepository(db=get_db())
+notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
 
 slack_token = config('SLACK_API_TOKEN')
 

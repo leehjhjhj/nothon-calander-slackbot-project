@@ -5,10 +5,10 @@ from .check_meeting import check_meeting_id, check_meeting_time
 
 from persistance.meeting_repository import MeetingRepository
 from persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
-from database import get_db
+from database import SessionLocal
 
-meeting_repo = MeetingRepository(db=get_db())
-notion_slack_mapping_repo = NotionSlackMappingRepository(db=get_db())
+meeting_repo = MeetingRepository(db=SessionLocal())
+notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
 
 
 def save_meeting_facade():

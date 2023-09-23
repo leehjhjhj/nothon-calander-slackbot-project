@@ -10,7 +10,7 @@ def farthing_calender_data(result):
 
     meeting = Notion(
         page_id=result.get('id'),
-        notion_database_id=result.get("parent",{}).get("database_id"),
+        notion_database_id=result.get("parent",{}).get("database_id").replace('-',''),
         status=status_enum,
         time=datetime.fromisoformat(properties.get("날짜", {}).get("date", {}).get("start")),
         meeting_type=properties.get("종류", {}).get("multi_select", [{}])[0].get("name"),
