@@ -1,8 +1,15 @@
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from decouple import config
 
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:0000@localhost/test_db"
+user = config('DB_USER')
+password = config('DB_PASSWORD')
+host = config('DB_HOST')
+port = config('DB_PORT')
+schema = config('DB_SCHEMA')
+
+SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{user}:{password}@{host}:{port}/{schema}"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
