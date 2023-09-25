@@ -1,9 +1,12 @@
 from celery import Celery
+from decouple import config
+
+redis_host = config('REDIS_HOST')
 
 celery_task = Celery(
     'app',
-    broker="redis://redis:6379/0",
-    backend="redis://redis:6379/1",
+    broker=f"redis://{redis_host}:6379/0",
+    backend=f"redis://{redis_host}:6379/1",
     include=['celery_config.celery_beat', 'celery_config.celery_worker']
 )
 
