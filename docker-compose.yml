@@ -1,6 +1,7 @@
 version: '3'
 services:
   web:
+    image: 279381197488.dkr.ecr.ap-northeast-2.amazonaws.com/notion-slack-web:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -8,29 +9,40 @@ services:
     ports:
       - "8000:8000"
     platform: linux/amd64
+    env_file:
+      - .env
     depends_on:
       - redis
   beat:
+    image: 279381197488.dkr.ecr.ap-northeast-2.amazonaws.com/notion-slack-beat:latest
     build:
       context: .
       dockerfile: Dockerfile
     command: celery -A celery_config.celery_app.celery_task beat --loglevel=info
+    env_file:
+      - .env
     depends_on:
       - redis
   worker:
+    image: 279381197488.dkr.ecr.ap-northeast-2.amazonaws.com/notion-slack-worker:latest
     build:
       context: .
       dockerfile: Dockerfile
     command: celery -A celery_config.celery_app.celery_task worker --loglevel=info
+    env_file:
+      - .env
     depends_on:
       - redis
   flower:
+    image: 279381197488.dkr.ecr.ap-northeast-2.amazonaws.com/notion-slack-flower:latest
     build:
       context: .
       dockerfile: Dockerfile
     command: celery -A celery_config.celery_app.celery_task flower
     ports:
       - "5555:5555"
+    env_file:
+      - .env
     depends_on:
       - redis
       - worker 
