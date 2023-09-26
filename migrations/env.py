@@ -6,11 +6,21 @@ from sqlalchemy import pool
 from alembic import context
 from database import Base
 from entity import Notion, StatusChoice, NotionSlackMapping
+from decouple import config
+
+user = config('DB_USER')
+password = config('DB_PASSWORD')
+host = config('DB_HOST')
+port = config('DB_PORT')
+schema = config('DB_SCHEMA')
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
+if not config.get_main_option('sqlalchemy.url'):
+    config.set_main_option('sqlalchemy.url',f"mysql+pymysql://{user}:{password}@{host}:{port}/{schema}?charset=utf8mb4") 
+    
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
@@ -40,6 +50,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
+
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,

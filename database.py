@@ -9,8 +9,7 @@ host = config('DB_HOST')
 port = config('DB_PORT')
 schema = config('DB_SCHEMA')
 
-SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{user}:{password}@{host}:{port}/{schema}"
-
+SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{user}:{password}@{host}:{port}/{schema}?charset=utf8mb4"
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
 )
