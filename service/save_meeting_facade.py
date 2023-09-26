@@ -27,14 +27,14 @@ def save_meeting_facade():
                     if check_meeting_id(meeting.page_id, set_meeting_ids):
                         try:
                             meeting_repo.merge_meeting(meeting)
-                        except:
-                            print("저장 오류")
+                        except Exception as e:
+                            print(f"저장 오류: {e}")
                     else:
                         worker_facade(meeting)
                         try:
                             meeting_repo.add_meeting(meeting)
-                        except:
-                            print("저장 오류")
+                        except Exception as e:
+                            print(f"저장 오류: {e}")
     finally:
         meeting_repo.db.close()
         notion_slack_mapping_repo.db.close()
