@@ -20,7 +20,7 @@ def save_meeting_facade():
 
             list_meeting_ids = meeting_repo.get_all_meeting_ids(notion_database_id)
             set_meeting_ids = set(list_meeting_ids)
-
+            print(set_meeting_ids)
             for result in results:
                 meeting = farthing_calender_data(result)
                 if check_meeting_time(meeting.time):

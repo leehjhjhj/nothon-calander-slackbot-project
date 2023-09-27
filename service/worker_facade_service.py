@@ -12,7 +12,7 @@ def worker_facade(meeting):
     }
     reminder_time_one_day = meeting.time - timedelta(days=1)
     reminder_time_ten_minutes = meeting.time - timedelta(minutes=10)
-
+    print("In to working facade")
     schedule_one_day_before.apply_async(kwargs=extra, eta=reminder_time_one_day)
     schedule_ten_minutes_before.apply_async(kwargs=extra, eta=reminder_time_ten_minutes)
     

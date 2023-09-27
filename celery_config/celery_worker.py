@@ -36,6 +36,7 @@ def schedule_one_day_before(**kwargs):
             for slack_channel_id in slack_channel_ids:
                 slack = SendToSlackAPI(slack_token, slack_channel_id) 
                 slack.send_message(message)
+                print(f"{message} 전송 완료")
     finally:
         notion_slack_mapping_repo.db.close()
 
@@ -55,5 +56,6 @@ def schedule_ten_minutes_before(**kwargs):
             for slack_channel_id in slack_channel_ids:
                 slack = SendToSlackAPI(slack_token, slack_channel_id)
                 slack.send_message(message)
+                print(f"{message} 전송 완료")
     finally:
         notion_slack_mapping_repo.db.close()
