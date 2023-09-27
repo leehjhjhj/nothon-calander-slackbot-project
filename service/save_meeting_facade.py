@@ -25,11 +25,13 @@ def save_meeting_facade():
                 meeting = farthing_calender_data(result)
                 if check_meeting_time(meeting.time):
                     if check_meeting_id(meeting.page_id, set_meeting_ids):
+                        print(f"{meeting.name}이 else에 들어왔다.")
                         try:
                             meeting_repo.merge_meeting(meeting)
                         except Exception as e:
                             print(f"저장 오류: {e}")
                     else:
+                        print(f"{meeting.name}이 else에 들어왔다.")
                         worker_facade(meeting)
                         try:
                             meeting_repo.add_meeting(meeting)
