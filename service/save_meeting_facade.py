@@ -25,7 +25,7 @@ def save_meeting_facade():
                 meeting = farthing_calender_data(result)
                 if check_meeting_time(meeting.time):
                     if check_meeting_id(meeting.page_id, set_meeting_ids):
-                        print(f"{meeting.name}이 else에 들어왔다.")
+                        print(f"{meeting.name}이 if로 들어왔다.")
                         try:
                             meeting_repo.merge_meeting(meeting)
                         except Exception as e:
