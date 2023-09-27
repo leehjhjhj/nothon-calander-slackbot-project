@@ -7,20 +7,20 @@ from persistance.meeting_repository import MeetingRepository
 from persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
 from database import SessionLocal
 
-meeting_repo = MeetingRepository(db=SessionLocal())
-notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
-
 def save_meeting_facade():
+    meeting_repo = MeetingRepository(db=SessionLocal())
+    notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
+
     try:
         notion_database_ids = notion_slack_mapping_repo.get_all_database_ids()
-
+        print("DB에 있는 노션디비 목록:", notion_database_ids)
         for notion_database_id in notion_database_ids:
             data = read_notion_database(notion_database_id)
             results = data.get('results')
 
             list_meeting_ids = meeting_repo.get_all_meeting_ids(notion_database_id)
             set_meeting_ids = set(list_meeting_ids)
-            print(set_meeting_ids)
+            print("DB에 있는 회의 목록", set_meeting_ids)
             for result in results:
                 meeting = farthing_calender_data(result)
                 if check_meeting_time(meeting.time):

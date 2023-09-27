@@ -10,3 +10,6 @@ celery_task = Celery(
     include=['celery_config.celery_beat', 'celery_config.celery_worker']
 )
 
+celery_task.conf.update(
+    timezone='Asia/Seoul',
+)
