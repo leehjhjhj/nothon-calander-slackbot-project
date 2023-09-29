@@ -32,6 +32,7 @@ def save_meeting_facade():
                             print(f"저장 오류: {e}")
                     else:
                         print(f"{meeting.name}이 else에 들어왔다.")
+                        worker_facade(meeting)
                         try:
                             meeting_repo.add_meeting(meeting)
                         except Exception as e:
