@@ -1,5 +1,15 @@
 from celery_config.celery_worker import schedule_one_day_before, schedule_ten_minutes_before
 from datetime import timedelta
+from celery.result import AsyncResult
+from celery_config.celery_app import celery_task
+
+def make_uuid(page_id, cmd):
+    head = ''
+    if cmd == "one_day":
+        head = "1-day-"
+    elif cmd == "ten_min":
+        head = "10-min-"
+    return head + page_id
 
 def worker_facade(meeting):
     try:
@@ -12,10 +22,18 @@ def worker_facade(meeting):
             "notion_database_id": meeting.notion_database_id,
         }
         reminder_time_one_day = meeting.time - timedelta(days=1)
+        one_day_uuid = make_uuid(meeting.page_id, "one_day")
+        res_one_day = AsyncResult(id=one_day_uuid, app=celery_task)
+
         reminder_time_ten_minutes = meeting.time - timedelta(minutes=10)
-        print("In to working facade")
-        schedule_one_day_before.apply_async(kwargs=extra, eta=reminder_time_one_day)
-        schedule_ten_minutes_before.apply_async(kwargs=extra, eta=reminder_time_ten_minutes)
+        ten_min_uuid = make_uuid(meeting.page_id, "ten-min")
+        res_ten_min = AsyncResult(id=ten_min_uuid, app=celery_task)
+        if not res_one_day.ready():
+            schedule_one_day_before.apply_async(kwargs=extra, eta=reminder_time_one_day, task_id=one_day_uuid)
+        
+        if not res_ten_min.ready():
+            schedule_ten_minutes_before.apply_async(kwargs=extra, eta=reminder_time_ten_minutes, task_id=ten_min_uuid)
+            
     except Exception as e:
         print(f"에러 발생: {e}")
     
