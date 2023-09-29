@@ -26,14 +26,15 @@ def worker_facade(meeting):
         res_one_day = AsyncResult(id=one_day_uuid, app=celery_task)
 
         reminder_time_ten_minutes = meeting.time - timedelta(minutes=10)
-        ten_min_uuid = make_uuid(meeting.page_id, "ten-min")
+        ten_min_uuid = make_uuid(meeting.page_id, "ten_min")
         res_ten_min = AsyncResult(id=ten_min_uuid, app=celery_task)
+        
         if not res_one_day.ready():
             schedule_one_day_before.apply_async(kwargs=extra, eta=reminder_time_one_day, task_id=one_day_uuid)
         
         if not res_ten_min.ready():
             schedule_ten_minutes_before.apply_async(kwargs=extra, eta=reminder_time_ten_minutes, task_id=ten_min_uuid)
-            
+
     except Exception as e:
         print(f"에러 발생: {e}")
     
