@@ -12,6 +12,7 @@ def make_uuid(page_id, cmd):
     return head + page_id
 
 def worker_facade(meeting):
+    print('in worker facade')
     try:
         extra = {
             "page_id" : meeting.page_id,
@@ -30,10 +31,10 @@ def worker_facade(meeting):
         res_ten_min = AsyncResult(id=ten_min_uuid, app=celery_task)
         
         if not res_one_day.ready():
-            schedule_one_day_before.apply_async(kwargs=extra, eta=reminder_time_one_day, task_id=one_day_uuid)
+            schedule_one_day_before.apply_async(kwargs=extra, eta=reminder_time_one_day, task_id=one_day_uuid, headers={'scheduled_by': 'worker_facade'})
         
         if not res_ten_min.ready():
-            schedule_ten_minutes_before.apply_async(kwargs=extra, eta=reminder_time_ten_minutes, task_id=ten_min_uuid)
+            schedule_ten_minutes_before.apply_async(kwargs=extra, eta=reminder_time_ten_minutes, task_id=ten_min_uuid, headers={'scheduled_by': 'worker_facade'})
 
     except Exception as e:
         print(f"에러 발생: {e}")
