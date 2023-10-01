@@ -2,6 +2,7 @@ from celery_config.celery_worker import schedule_one_day_before, schedule_ten_mi
 from datetime import timedelta
 from celery.result import AsyncResult
 from celery_config.celery_app import celery_task
+import logging
 
 def make_uuid(page_id, cmd):
     head = ''
@@ -12,7 +13,7 @@ def make_uuid(page_id, cmd):
     return head + page_id
 
 def worker_facade(meeting):
-    print('in worker facade')
+    logging.info('in worker facade')
     try:
         extra = {
             "page_id" : meeting.page_id,
@@ -37,5 +38,5 @@ def worker_facade(meeting):
             schedule_ten_minutes_before.apply_async(kwargs=extra, eta=reminder_time_ten_minutes, task_id=ten_min_uuid, headers={'scheduled_by': 'worker_facade'})
 
     except Exception as e:
-        print(f"에러 발생: {e}")
+        logging.error(f"에러 발생: {e}")
     
