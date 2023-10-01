@@ -37,6 +37,8 @@ def save_meeting_facade():
                             meeting_repo.add_meeting(meeting)
                         except Exception as e:
                             print(f"저장 오류: {e}")
+    except Exception as e:
+        print(f"save meeting 자체 오류 발생!: {e}")
     finally:
         meeting_repo.db.close()
         notion_slack_mapping_repo.db.close()
