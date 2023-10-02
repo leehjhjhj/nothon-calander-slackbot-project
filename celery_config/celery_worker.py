@@ -15,7 +15,6 @@ def transform_date(time):
     formatted_time = f"{time.month}월 {time.day}일 {am_pm} {hour_12}시 {time.minute}분"
     return formatted_time
 
-@shared_task
 def schedule_one_day_before(**kwargs):
     notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
     try:
@@ -43,7 +42,6 @@ def schedule_one_day_before(**kwargs):
     finally:
         notion_slack_mapping_repo.db.close()
 
-@shared_task
 def schedule_ten_minutes_before(**kwargs):
     notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
     try:
