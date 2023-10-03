@@ -12,7 +12,6 @@ def make_uuid(page_id, cmd):
         head = "10-min-"
     return head + page_id
 
-@celery_task.task
 def worker_facade(meeting):
     logging.info('in worker facade')
     try:

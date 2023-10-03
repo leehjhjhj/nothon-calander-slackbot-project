@@ -1,56 +1,14 @@
 from .celery_app import celery_task
 from datetime import timedelta 
-from service.read_calander import read_notion_database
-from service.farthing import farthing_calender_data
-from service.worker_facade_service import worker_facade
-from service.check_meeting import check_meeting_id, check_meeting_time
-from persistance.meeting_repository import MeetingRepository
-from persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
-from database import SessionLocal
-import logging
+from service.save_meeting_facade import save_meeting_facade
 
 celery_task.conf.beat_schedule = {
     'schedule-meetings-every-hour': {
-        'task': 'celery_config.celery_beat.save_meeting_facade',
-        'schedule': timedelta(minutes=10)
+        'task': 'celery_config.celery_beat.schedule_meeting',
+        'schedule': timedelta(hours=1)
     },
 }
 
 @celery_task.task
-def save_meeting_facade():
-    meeting_repo = MeetingRepository(db=SessionLocal())
-    notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
-
-    try:
-        notion_database_ids = notion_slack_mapping_repo.get_all_database_ids()
-        logging.info("DB에 있는 노션디비 목록: %s", notion_database_ids)
-        for notion_database_id in notion_database_ids:
-            data = read_notion_database(notion_database_id)
-            results = data.get('results')
-
-            list_meeting_ids = meeting_repo.get_all_meeting_ids(notion_database_id)
-            set_meeting_ids = set(list_meeting_ids)
-            logging.info(f"DB에 있는 회의 목록 {set_meeting_ids}")
-            for result in results:
-                meeting = farthing_calender_data(result)
-                if check_meeting_time(meeting.time):
-                    if check_meeting_id(meeting.page_id, set_meeting_ids):
-                        logging.info(f"{ meeting.name}이 if로 들어왔다.")
-                        try:
-                            meeting_repo.merge_meeting(meeting)
-                        except Exception as e:
-                            logging.error(f"저장 오류: {e}")
-                    else:
-                        logging.info(f"{meeting.name}이 else에 들어왔다.")
-                        worker_facade(meeting)
-                        try:
-                            meeting_repo.add_meeting(meeting)
-                        except Exception as e:
-                            logging.error(f"저장 오류: {e}")
-
-    except Exception as e:
-        logging.error(f"save meeting 자체 오류 발생!: {e}")
-
-    finally:
-        meeting_repo.db.close()
-        notion_slack_mapping_repo.db.close()
+def schedule_meeting():
+    save_meeting_facade()

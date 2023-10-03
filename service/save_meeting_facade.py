@@ -6,7 +6,6 @@ from .check_meeting import check_meeting_id, check_meeting_time
 from persistance.meeting_repository import MeetingRepository
 from persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
 from database import SessionLocal
-
 import logging
 
 def save_meeting_facade():
@@ -22,26 +21,26 @@ def save_meeting_facade():
 
             list_meeting_ids = meeting_repo.get_all_meeting_ids(notion_database_id)
             set_meeting_ids = set(list_meeting_ids)
-            logging.info("DB에 있는 회의 목록 %s", set_meeting_ids)
+            logging.info(f"DB에 있는 회의 목록 {set_meeting_ids}")
             for result in results:
                 meeting = farthing_calender_data(result)
                 if check_meeting_time(meeting.time):
                     if check_meeting_id(meeting.page_id, set_meeting_ids):
-                        logging.info("%s이 if로 들어왔다.", meeting.name)
+                        logging.info(f"{ meeting.name}이 if로 들어왔다.")
                         try:
                             meeting_repo.merge_meeting(meeting)
                         except Exception as e:
-                            logging.error("저장 오류: %s", e)
+                            logging.error(f"저장 오류: {e}")
                     else:
-                        logging.info("%s이 else에 들어왔다.", meeting.name)
+                        logging.info(f"{meeting.name}이 else에 들어왔다.")
                         worker_facade(meeting)
                         try:
                             meeting_repo.add_meeting(meeting)
                         except Exception as e:
-                            logging.error("저장 오류: %s", e)
+                            logging.error(f"저장 오류: {e}")
 
     except Exception as e:
-        logging.error("save meeting 자체 오류 발생!: %s", e)
+        logging.error(f"save meeting 자체 오류 발생!: {e}")
 
     finally:
         meeting_repo.db.close()
