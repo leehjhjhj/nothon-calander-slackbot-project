@@ -4,7 +4,7 @@ from .send_message import SendToSlackAPI
 from .check_cancel import check_status
 from persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
 from database import SessionLocal
-
+from celery_config.celery_app import celery_task
 
 
 slack_token = config('SLACK_API_TOKEN')
@@ -15,6 +15,7 @@ def transform_date(time):
     formatted_time = f"{time.month}월 {time.day}일 {am_pm} {hour_12}시 {time.minute}분"
     return formatted_time
 
+@celery_task.task
 def schedule_one_day_before(**kwargs):
     notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
     try:
@@ -42,6 +43,7 @@ def schedule_one_day_before(**kwargs):
     finally:
         notion_slack_mapping_repo.db.close()
 
+@celery_task.task
 def schedule_ten_minutes_before(**kwargs):
     notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
     try:

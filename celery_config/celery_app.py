@@ -13,3 +13,5 @@ celery_task = Celery(
 celery_task.conf.update(
     timezone='Asia/Seoul',
 )
+
+celery_task.conf.broker_transport_options = {'visibility_timeout': 31536000} 
