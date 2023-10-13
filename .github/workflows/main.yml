@@ -38,7 +38,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: compose
-        run: zip -r ./dist.zip ./deploy/scripts/ ./deploy/appspec.yml ./docker-compose.yml
+        run: zip -r ./dist.zip ./deploy/scripts/ ./deploy/appspec.yml ./docker-compose.yml ./appspec.yml
   
       - name: upload to S3
         run: |
