@@ -12,7 +12,7 @@ permissions:
 hooks:
   ApplicationStop:
     - location: scripts/stop_docker.sh
-    - runas: ec2-user
+      runas: ec2-user
   BeforeInstall:
     - location: scripts/pull_images_from_ecr.sh
       timeout: 300
