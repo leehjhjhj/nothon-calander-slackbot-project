@@ -1,6 +1,5 @@
 #!/bin/bash
 
-if [ "$(docker ps -aq)" ]; then
-    docker stop $(docker ps -aq)
-    docker rm $(docker ps -aq)
-fi
+PROJECT_PATH=/home/ec2-user/
+cd ${PROJECT_PATH}
+docker-compose down
