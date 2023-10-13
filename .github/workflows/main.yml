@@ -23,7 +23,7 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-
+    
       - name: Set up and build Docker Compose
         run: |
           sudo apt-get update
@@ -36,10 +36,10 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
+          
       - name: compose
-        run: zip -r ./dist.zip ./deploy/scripts/ ./deploy/appspec.yml ./docker-compose.yml ./appspec.yml
-  
+        run: zip -r ./dist.zip ./appspec.yml ./deploy/scripts/ ./docker-compose.yml
+
       - name: upload to S3
         run: |
           aws s3 cp \
