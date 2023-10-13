@@ -11,13 +11,13 @@ permissions:
     mode: 755
 hooks:
   ApplicationStop:
-    - location: deploy/scripts/stop_docker.sh
+    - location: scripts/stop_docker.sh
     - runas: ec2-user
   BeforeInstall:
-    - location: deploy/scripts/pull_images_from_ecr.sh
+    - location: scripts/pull_images_from_ecr.sh
       timeout: 300
       runas: ec2-user
   AfterInstall:
-    - location: deploy/scripts/start_server.sh
+    - location: scripts/start_server.sh
       timeout: 300
       runas: ec2-user 
