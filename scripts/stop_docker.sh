@@ -1,3 +1,6 @@
 #!/bin/bash
-docker stop $(docker ps -a -q) 
-docker rm $(docker ps -a -q)
+
+if [ "$(docker ps -aq)" ]; then
+    docker stop $(docker ps -aq)
+    docker rm $(docker ps -aq)
+fi
