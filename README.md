@@ -1,5 +1,6 @@
 # 🤖 프로젝트를 더 슬기롭게! 노션 회의 일정 슬랙 봇 프로젝트
 ## 🌟 소개
+<img src="https://github.com/leehjhjhj/nothon-calander-slackbot-project/assets/102458609/5ba340fc-6bd2-4754-9751-f7f7953312d6" width="10%" height="10%"><br>
 ### 더욱 효율적인 협업을 위해 노션 캘린더와 슬랙을 연동시키는 프로젝트입니다.
 **노션 캘린더 데이터베이스 화면**<br>
 <img src="https://github.com/leehjhjhj/nothon-calander-slackbot-project/assets/102458609/d9c8eb0e-ce67-417b-87cd-699e9d72cd1b" width="40%" height="40%"><br><br>
