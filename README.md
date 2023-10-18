@@ -13,7 +13,7 @@
   - Fastapi, Celery, Notion api, Slack sdk
   - Aws ec2, rds, codedeploy, github actions, nginx, docker
 
-## 개발 내용 및 경험
+## 🤹‍♂️ 개발 내용 및 경험
 ### Celery를 이용한 스케줄링
 celery beat와 worker를 사용하여 주기적으로 데이터베이스를 읽고, celery task 함수의 `appy_async`의 `eta`인자를 활용해서 알림 시간을 스케줄링 하였습니다.
 ### 책임 분리
