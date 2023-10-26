@@ -7,7 +7,7 @@ class NotionSlackMapping(Base):
 
     id = Column(Integer, primary_key=True)
     notion_database_id = Column(String(256), ForeignKey("notion_database.notion_database_id"))
-    slack_channel_id = Column(String(256), ForeignKey("slack_channel.notion_database_id"))
+    slack_channel_id = Column(String(256), ForeignKey("slack_channel.slack_channel_id"))
     connect_name = Column(String(64), nullable=False)
 
     notion_mapping = relationship("entity.NotionDatabase", back_populates="notion_mappings")
