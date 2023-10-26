@@ -17,14 +17,16 @@ def save_meeting_facade():
     try:
         notion_database_ids = notion_slack_mapping_repo.get_all_database_ids()
         logging.info("DB에 있는 노션디비 목록: %s", notion_database_ids)
+
         for notion_database_id in notion_database_ids:
             notion_api_key = notion_repository.get_api_token_by_notion_database_id(notion_database_id)
             data = read_notion_database(notion_database_id, notion_api_key)
             results = data.get('results')
 
-            list_meeting_ids = meeting_repo.get_all_meeting_ids(notion_database_id)
+            list_meeting_ids = meeting_repo.get_all_page_ids(notion_database_id)
             set_meeting_ids = set(list_meeting_ids)
             logging.info(f"DB에 있는 회의 목록 {set_meeting_ids}")
+
             for result in results:
                 meeting = farthing_calender_data(result)
                 if check_meeting_time(meeting.time):
@@ -48,3 +50,4 @@ def save_meeting_facade():
     finally:
         meeting_repo.db.close()
         notion_slack_mapping_repo.db.close()
+        notion_repository.db.close()
