@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from database import Base
-from entity import Notion, StatusChoice, NotionSlackMapping
+from entity import Notion, NotionDatabase, NotionPage, StatusChoice, NotionSlackMapping, Slack, SlackChannel
 from decouple import config
 
 user = config('DB_USER')
