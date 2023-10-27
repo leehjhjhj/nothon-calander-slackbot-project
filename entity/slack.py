@@ -20,4 +20,4 @@ class SlackChannel(Base):
     channel_name = Column(String(64), nullable=False)
 
     slack = relationship("Slack", back_populates="slack_channels")
-    slack_mappings = relationship("entity.NotionSlackMapping", back_populates="slack_mapping", cascade="all, delete-orphan")
+    slack_mappings = relationship("NotionSlackMapping", back_populates="slack_mapping", cascade="all, delete-orphan")

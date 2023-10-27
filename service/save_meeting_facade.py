@@ -12,14 +12,14 @@ import logging
 def save_meeting_facade():
     meeting_repo = MeetingRepository(db=SessionLocal())
     notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
-    notion_repository = NotionRepository(db=SessionLocal())
+    notion_repo = NotionRepository(db=SessionLocal())
 
     try:
         notion_database_ids = notion_slack_mapping_repo.get_all_database_ids()
         logging.info("DB에 있는 노션디비 목록: %s", notion_database_ids)
 
         for notion_database_id in notion_database_ids:
-            notion_api_key = notion_repository.get_api_token_by_notion_database_id(notion_database_id)
+            notion_api_key = notion_repo.get_api_token_by_notion_database_id(notion_database_id)
             data = read_notion_database(notion_database_id, notion_api_key)
             results = data.get('results')
 
@@ -50,4 +50,4 @@ def save_meeting_facade():
     finally:
         meeting_repo.db.close()
         notion_slack_mapping_repo.db.close()
-        notion_repository.db.close()
+        notion_repo.db.close()

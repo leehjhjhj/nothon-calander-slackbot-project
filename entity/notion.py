@@ -26,7 +26,7 @@ class NotionDatabase(Base):
 
     notion = relationship("Notion", back_populates="notion_databases")
     notion_pages = relationship("NotionPage", back_populates="notion_database", cascade="all, delete-orphan")
-    notion_mappings = relationship("entity.NotionSlackMapping", back_populates="notion_mapping", cascade="all, delete-orphan")
+    notion_mappings = relationship("NotionSlackMapping", back_populates="notion_mapping", cascade="all, delete-orphan")
 
 class NotionPage(Base):
     __tablename__ = "notion_page"
