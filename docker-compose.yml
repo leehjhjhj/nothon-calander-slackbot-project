@@ -18,6 +18,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    working_dir: /project/src
     command: celery -A celery_config.celery_app.celery_task beat --loglevel=info
     platform: linux/amd64
     env_file:
@@ -29,6 +30,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    working_dir: /project/src
     command: celery -A celery_config.celery_app.celery_task worker --loglevel=info
     platform: linux/amd64
     env_file:

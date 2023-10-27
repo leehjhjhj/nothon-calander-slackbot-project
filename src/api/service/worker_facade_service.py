@@ -3,6 +3,7 @@ from datetime import timedelta
 from celery.result import AsyncResult
 from celery_config.celery_app import celery_task
 import logging
+from entity import NotionPage
 
 def make_uuid(page_id, cmd):
     head = ''
@@ -12,7 +13,7 @@ def make_uuid(page_id, cmd):
         head = "10-min-"
     return head + page_id
 
-def worker_facade(meeting):
+def worker_facade(meeting: NotionPage):
     logging.info('in worker facade')
     try:
         extra = {

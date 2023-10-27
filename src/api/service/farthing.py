@@ -1,14 +1,14 @@
 from datetime import datetime
-from entity import Notion, StatusChoice
+from entity import NotionPage, StatusChoice
 
-def farthing_calender_data(result):
+def farthing_calender_data(result) -> NotionPage:
 
     properties = result.get('properties', {})
 
     status_str = properties.get("확정여부", {}).get("multi_select", [{}])[0].get("name")
     status_enum = StatusChoice(status_str) if status_str else None
 
-    meeting = Notion(
+    meeting = NotionPage(
         page_id=result.get('id'),
         notion_database_id=result.get("parent",{}).get("database_id").replace('-',''),
         status=status_enum,
