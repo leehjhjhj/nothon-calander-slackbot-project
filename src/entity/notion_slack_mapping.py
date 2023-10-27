@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from database import Base
+from src.database import Base
 from sqlalchemy.orm import relationship
 
 class NotionSlackMapping(Base):
