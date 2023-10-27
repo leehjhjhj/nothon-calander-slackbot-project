@@ -1,4 +1,4 @@
-from persistance.meeting_repository import MeetingRepository
+from api.persistance.meeting_repository import MeetingRepository
 from database import SessionLocal
 from entity import StatusChoice
 

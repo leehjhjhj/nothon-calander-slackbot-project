@@ -1,9 +1,7 @@
-from celery import shared_task
-from decouple import config
 from .send_message import SendToSlackAPI
 from .check_cancel import check_status
-from persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
-from persistance.slack_repository import SlackRepository
+from api.persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
+from api.persistance.slack_repository import SlackRepository
 from database import SessionLocal
 from celery_config.celery_app import celery_task
 
@@ -60,7 +58,6 @@ def schedule_ten_minutes_before(**kwargs):
 
         message = f">:bangbang: 곧 10분 뒤에 \"{name}\" 가 시작돼요! 모두 준비해주세요.\n" \
             f"> 회의 노션페이지: <{meeting_url}|바로가기>\n" \
-            f"> 회의 게더페이지: <https://app.gather.town/app/FTxjSAAG3FJXpK5W/likelion-hufs-seoul-11th|입장하기>"
 
         if check_status(page_id):
             for slack_channel_id in slack_channel_ids:
@@ -68,6 +65,7 @@ def schedule_ten_minutes_before(**kwargs):
                 slack = SendToSlackAPI(slack_token, slack_channel_id)
                 slack.send_message(message)
                 print(f"{message} 전송 완료")
+
     except Exception as e:
         print(f"전송실패: {e}")
     finally:

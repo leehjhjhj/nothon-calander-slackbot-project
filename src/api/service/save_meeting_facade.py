@@ -3,9 +3,9 @@ from .farthing import farthing_calender_data
 from .worker_facade_service import worker_facade
 from .check_meeting import check_meeting_id, check_meeting_time
 
-from persistance.meeting_repository import MeetingRepository
-from persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
-from persistance.notion_repository import NotionRepository
+from api.persistance.meeting_repository import MeetingRepository
+from api.persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
+from api.persistance.notion_repository import NotionRepository
 from database import SessionLocal
 import logging
 
