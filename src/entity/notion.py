@@ -38,5 +38,6 @@ class NotionPage(Base):
     meeting_type = Column(String(64), nullable=False)
     meeting_url = Column(String(512), nullable=False)
     name = Column(String(64), nullable=False)
-
+    participants = Column(String(128), nullable=True)
+     
     notion_database = relationship("NotionDatabase", back_populates="notion_pages")
