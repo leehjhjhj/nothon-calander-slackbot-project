@@ -21,6 +21,7 @@ def schedule_one_day_before(**kwargs):
         name = kwargs.get('name')
         meeting_url = kwargs.get('meeting_url')
         meeting_type = kwargs.get('meeting_type')
+        participants = kwargs.get('participants')
         
         notion_database_id = kwargs.get('notion_database_id')
         slack_channel_ids = notion_slack_mapping_repo.get_slack_channel_id_by_notion_database_id(notion_database_id)
@@ -28,7 +29,8 @@ def schedule_one_day_before(**kwargs):
         transformed_date = transform_date(time)
         message = f">:bell: {transformed_date}에 \"{name}\" 회의가 예정되어있어요! 잊지 마세요. \n" \
             f"> 회의 타입: `{meeting_type}`\n" \
-            f"> 회의 노션페이지: <{meeting_url}|바로가기>"
+            f"> 회의 노션페이지: <{meeting_url}|바로가기>\n"\
+            f"> 참여자: {participants}"
         
         if check_status(page_id):
             for slack_channel_id in slack_channel_ids:
@@ -52,12 +54,14 @@ def schedule_ten_minutes_before(**kwargs):
         page_id = kwargs.get('page_id')
         name = kwargs.get('name')
         meeting_url = kwargs.get('meeting_url')
+        participants = kwargs.get('participants')
 
         notion_database_id = kwargs.get('notion_database_id')
         slack_channel_ids = notion_slack_mapping_repo.get_slack_channel_id_by_notion_database_id(notion_database_id)
 
         message = f">:bangbang: 곧 10분 뒤에 \"{name}\" 가 시작돼요! 모두 준비해주세요.\n" \
             f"> 회의 노션페이지: <{meeting_url}|바로가기>\n" \
+            f"> 참여자: {participants}"
 
         if check_status(page_id):
             for slack_channel_id in slack_channel_ids:

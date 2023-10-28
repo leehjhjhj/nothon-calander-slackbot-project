@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from entity import SlackChannel, Slack
+from entity import SlackChannel, Slack, NotionDatabase, NotionSlackMapping
 from sqlalchemy.orm import joinedload
 
 class SlackRepository:
@@ -19,3 +19,16 @@ class SlackRepository:
             return slack_channel.slack.slack_api_token
         else:
             return None
+        
+    def get_api_token_by_notion_database_id(self, notion_database_id):
+        result = self.db.query(Slack.slack_api_token).\
+        join(SlackChannel).\
+        join(NotionSlackMapping).\
+        join(NotionDatabase).\
+        filter(NotionDatabase.notion_database_id == notion_database_id).\
+        first()
+
+        if result:
+            return result[0]
+
+        return None
