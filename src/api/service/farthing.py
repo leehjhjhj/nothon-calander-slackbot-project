@@ -1,6 +1,5 @@
 from datetime import datetime
 from entity import NotionPage, StatusChoice
-from .farthing_patifipants import make_participants
 import logging
 
 def farthing_calender_data(result) -> NotionPage:
