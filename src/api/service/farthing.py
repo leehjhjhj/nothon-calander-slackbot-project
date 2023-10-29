@@ -10,7 +10,6 @@ def farthing_calender_data(result) -> NotionPage:
         status_str = properties.get("확정여부", {}).get("multi_select", [{}])[0].get("name")
         status_enum = StatusChoice(status_str) if status_str else None
         notion_database_id=result.get("parent",{}).get("database_id").replace('-','')
-        participants = make_participants(properties, notion_database_id)
 
         meeting = NotionPage(
             page_id=result.get('id'),
@@ -20,7 +19,6 @@ def farthing_calender_data(result) -> NotionPage:
             meeting_type=properties.get("종류", {}).get("multi_select", [{}])[0].get("name"),
             meeting_url=result.get('url'),
             name=properties.get("이름", {}).get("title", [{}])[0].get('text').get('content'),
-            participants=participants if participants else None
         )
         return meeting
     except Exception as e:
