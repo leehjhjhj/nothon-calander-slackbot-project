@@ -2,7 +2,7 @@ from .read_calander import read_notion_database
 from .farthing import farthing_calender_data
 from .worker_facade_service import worker_facade
 from .check_meeting import check_meeting_id, check_meeting_time
-
+from .add_participants import add_participants
 from api.persistance.meeting_repository import MeetingRepository
 from api.persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
 from api.persistance.notion_repository import NotionRepository
@@ -30,14 +30,9 @@ def save_meeting_facade():
             for result in results:
                 meeting = farthing_calender_data(result)
                 if check_meeting_time(meeting.time):
-                    if check_meeting_id(meeting.page_id, set_meeting_ids):
-                        logging.info(f"{ meeting.name}이 if로 들어왔다.")
-                        try:
-                            meeting_repo.merge_meeting(meeting)
-                        except Exception as e:
-                            logging.error(f"저장 오류: {e}")
-                    else:
-                        logging.info(f"{meeting.name}이 else에 들어왔다.")
+                    if not check_meeting_id(meeting.page_id, set_meeting_ids):
+                        logging.info(f"{meeting.name}이 ifif에 들어왔다.")
+                        meeting = add_participants(meeting, result)
                         worker_facade(meeting)
                         try:
                             meeting_repo.add_meeting(meeting)

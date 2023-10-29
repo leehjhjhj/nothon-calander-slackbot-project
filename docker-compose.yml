@@ -42,6 +42,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    working_dir: /project/src
     command: celery -A celery_config.celery_app.celery_task flower
     platform: linux/amd64
     ports:

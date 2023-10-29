@@ -23,6 +23,7 @@ def worker_facade(meeting: NotionPage):
             "name" : meeting.name,
             "meeting_type": meeting.meeting_type,
             "notion_database_id": meeting.notion_database_id,
+            "participants": meeting.participants,
         }
         reminder_time_one_day = meeting.time - timedelta(days=1)
         one_day_uuid = make_uuid(meeting.page_id, "one_day")
