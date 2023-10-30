@@ -15,7 +15,7 @@
   - Aws ec2, rds, codedeploy, github actions, nginx, docker
 
 ## 📀 ERD
-<img width="300" alt="image" src="https://github.com/leehjhjhj/nothon-calander-slackbot-project/assets/102458609/1587d60b-63d9-4be1-94d8-a5f3fadcf184">
+<img width="600" alt="image" src="https://github.com/leehjhjhj/nothon-calander-slackbot-project/assets/102458609/e00d664f-1561-49f7-b334-64238416fde9">
 
 ## 🤹‍♂️ 개발 내용 및 경험
 ### Celery를 이용한 스케줄링
