@@ -1,4 +1,4 @@
-from redis import Redis
+from utils.redis_connect import get_redis_connection
 from decouple import config
 from .workspace import Workspace
 from api.persistance import SlackRepository
@@ -7,13 +7,10 @@ from database import SessionLocal
 import logging
 import json
 
-redis_host = config('REDIS_HOST')
-redis_port = config('REDIS_PORT')
-
 def save_user_lists_to_redis():
     slack_repo = SlackRepository(db=SessionLocal())
     notion_slack_repo = NotionSlackMappingRepository(db=SessionLocal())
-    redis_con = Redis(host=redis_host, port=redis_port, db=3)
+    redis_con = get_redis_connection(db_select=3)
     try:
         slack_ids = notion_slack_repo.get_all_slack_channels()
         for slack_id in slack_ids:
