@@ -1,5 +1,4 @@
 from utils.redis_connect import get_redis_connection
-from decouple import config
 from .workspace import Workspace
 from api.persistance import SlackRepository
 from api.persistance import NotionSlackMappingRepository
