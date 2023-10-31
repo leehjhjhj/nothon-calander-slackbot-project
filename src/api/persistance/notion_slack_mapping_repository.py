@@ -8,6 +8,9 @@ class NotionSlackMappingRepository:
 
     def get_all_database_ids(self):
         return [record[0] for record in self.db.query(NotionSlackMapping.notion_database_id).distinct().all()]
-    
+
+    def get_all_slack_channels(self):
+        return [record[0] for record in self.db.query(NotionSlackMapping.slack_channel_id).distinct().all()]
+      
     def get_slack_channel_id_by_notion_database_id(self, notion_database_id):
-        return [m.slack_channel_id for m in self.db.query(NotionSlackMapping).filter_by(notion_database_id=notion_database_id)] 
+        return [m.slack_channel_id for m in self.db.query(NotionSlackMapping).filter_by(notion_database_id=notion_database_id)]
