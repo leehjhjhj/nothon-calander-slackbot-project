@@ -29,7 +29,7 @@ def save_meeting_facade():
 
             for result in results:
                 meeting = farthing_calender_data(result)
-                if check_meeting_time(meeting.time):
+                if meeting and check_meeting_time(meeting.time):
                     if not check_meeting_id(meeting.page_id, set_meeting_ids):
                         logging.info(f"{meeting.name}이 ifif에 들어왔다.")
                         meeting = add_participants(meeting, result)
