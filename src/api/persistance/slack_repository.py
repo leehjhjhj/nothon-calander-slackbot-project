@@ -6,6 +6,9 @@ class SlackRepository:
     
     def __init__(self, db: Session):
         self.db = db
+    
+    def get_slack_channel_id_by_notion_database_id(self, notion_database_id):
+        return self.db.query(NotionSlackMapping.slack_channel_id).filter_by(notion_database_id=notion_database_id).scalar()
 
     def get_api_token_by_slack_channel_id(self, slack_channel_id):
         slack_channel = (
