@@ -19,6 +19,7 @@ redis = "^5.0.0"
 slack-sdk = "^3.22.0"
 flower = "^2.0.1"
 cryptography = "^41.0.4"
+dependency-injector = "^4.41.0"
 
 
 [build-system]
