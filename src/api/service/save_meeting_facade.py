@@ -23,7 +23,7 @@ class MeetingProcess:
                 set_meeting_ids = set(list_meeting_ids)
                 for result in results:
                     meeting = self._farthing_calender_data(result)
-                    if self._check_meeting_time(meeting.time) and not self._check_meeting_id(meeting.page_id, set_meeting_ids):
+                    if self._check_meeting_time(meeting.time) and self._check_status(meeting.status) and not self._check_meeting_id(meeting.page_id, set_meeting_ids):
                         logging.info(f"{meeting.name}이 ifif에 들어왔다.")
                         meeting = self._participants_process.add_participants(meeting, result)
                         worker_facade(meeting)
@@ -85,3 +85,8 @@ class MeetingProcess:
             if str(e) == "can't compare offset-naive and offset-aware datetimes":
                 logging.error(f'시간 에러, 노션 DB 시간 수정 요망: {e}')
                 return False
+            
+    def _check_status(self, meeting_status):
+        if meeting_status in (StatusChoice.CANCELLED, StatusChoice.UNDEFINED):
+            return False
+        return True
