@@ -19,18 +19,24 @@ class MeetingProcess:
                 notion_api_key = self._notion_repo.get_api_token_by_notion_database_id(notion_database_id)
                 data = self._read_notion_database(notion_database_id, notion_api_key)
                 results = data.get('results')
+                
                 list_meeting_ids = self._meeting_repo.get_all_page_ids(notion_database_id)
                 set_meeting_ids = set(list_meeting_ids)
+
                 for result in results:
-                    meeting = self._farthing_calender_data(result)
-                    if self._check_meeting_time(meeting.time) and not self._check_meeting_id(meeting.page_id, set_meeting_ids):
-                        logging.info(f"{meeting.name}이 ifif에 들어왔다.")
-                        meeting = self._participants_process.add_participants(meeting, result)
-                        worker_facade(meeting)
-                        try:
-                            self._meeting_repo.add_meeting(meeting)
-                        except Exception as e:
-                            logging.error(f"저장 오류: {e}")
+                    try:
+                        meeting = self._farthing_calender_data(result)
+                        if self._check_meeting_time(meeting.time) and not self._check_meeting_id(meeting.page_id, set_meeting_ids):
+                            logging.info(f"{meeting.name}이 if에 들어왔다.")
+                            meeting = self._participants_process.add_participants(meeting, result)
+                            worker_facade(meeting)
+                            try:
+                                self._meeting_repo.add_meeting(meeting)
+                            except Exception as e:
+                                logging.error(f"저장 오류: {e}")
+                    except Exception as e:
+                        logging.error("DB ID: {}, 파싱 에러 발생: {}".format(notion_database_id, e))
+                        continue
         except Exception as e:
             logging.error(f"save meeting 자체 오류 발생!: {e}")
     
@@ -48,25 +54,22 @@ class MeetingProcess:
         return data
 
     def _farthing_calender_data(self, result) -> NotionPage:
-        try:
-            properties = result.get('properties', {})
+        properties = result.get('properties', {})
 
-            status_str = properties.get("확정여부", {}).get("multi_select", [{}])[0].get("name")
-            status_enum = StatusChoice(status_str) if status_str else None
-            notion_database_id=result.get("parent",{}).get("database_id").replace('-','')
+        status_str = properties.get("확정여부", {}).get("multi_select", [{}])[0].get("name")
+        status_enum = StatusChoice(status_str) if status_str else None
+        notion_database_id=result.get("parent",{}).get("database_id").replace('-','')
 
-            meeting = NotionPage(
-                page_id=result.get('id'),
-                notion_database_id=notion_database_id,
-                status=status_enum,
-                time=datetime.fromisoformat(properties.get("날짜", {}).get("date", {}).get("start")),
-                meeting_type=properties.get("종류", {}).get("multi_select", [{}])[0].get("name"),
-                meeting_url=result.get('url'),
-                name=properties.get("이름", {}).get("title", [{}])[0].get('text').get('content'),
-            )
-            return meeting
-        except Exception as e:
-            logging.error(f"파싱 에러: {e}")
+        meeting = NotionPage(
+            page_id=result.get('id'),
+            notion_database_id=notion_database_id,
+            status=status_enum,
+            time=datetime.fromisoformat(properties.get("날짜", {}).get("date", {}).get("start")),
+            meeting_type=properties.get("종류", {}).get("multi_select", [{}])[0].get("name"),
+            meeting_url=result.get('url'),
+            name=properties.get("이름", {}).get("title", [{}])[0].get('text').get('content'),
+        )
+        return meeting
 
     def _check_meeting_id(self, target_id, meeting_ids):
         if target_id in meeting_ids:
