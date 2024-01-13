@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from decouple import config
+from contextlib import contextmanager
 
 user = config('DB_USER')
 password = config('DB_PASSWORD')
@@ -18,6 +19,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
+@contextmanager
 def get_db():
     db = SessionLocal()
     try:

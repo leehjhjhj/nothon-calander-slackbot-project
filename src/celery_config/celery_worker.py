@@ -1,9 +1,16 @@
 from .send_message import SendToSlackAPI
-from .check_cancel import check_status
 from api.persistance.notion_slack_mapping_repository import NotionSlackMappingRepository
 from api.persistance.slack_repository import SlackRepository
-from database import SessionLocal
 from celery_config.celery_app import celery_task
+from api.persistance.meeting_repository import MeetingRepository
+from entity import StatusChoice
+
+def check_status(page_id: str):
+    repo = MeetingRepository()
+    notion = repo.find_meeting_by_page_id(page_id)
+    if notion.status == StatusChoice.CANCELLED:
+        return False
+    return True
 
 def transform_date(time):
     am_pm = "오후" if time.hour >= 12 else "오전"
@@ -13,8 +20,8 @@ def transform_date(time):
 
 @celery_task.task
 def schedule_one_day_before(**kwargs):
-    notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
-    slack_repo = SlackRepository(db=SessionLocal())
+    notion_slack_mapping_repo = NotionSlackMappingRepository()
+    slack_repo = SlackRepository()
     try:
         page_id = kwargs.get('page_id')
         time = kwargs.get('time')
@@ -41,14 +48,11 @@ def schedule_one_day_before(**kwargs):
 
     except Exception as e:
         print(f"전송실패: {e}")
-    finally:
-        notion_slack_mapping_repo.db.close()
-        slack_repo.db.close()
 
 @celery_task.task
 def schedule_five_hours_before(**kwargs):
-    notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
-    slack_repo = SlackRepository(db=SessionLocal())
+    notion_slack_mapping_repo = NotionSlackMappingRepository()
+    slack_repo = SlackRepository()
     try:
         page_id = kwargs.get('page_id')
         name = kwargs.get('name')
@@ -73,14 +77,12 @@ def schedule_five_hours_before(**kwargs):
 
     except Exception as e:
         print(f"전송실패: {e}")
-    finally:
-        notion_slack_mapping_repo.db.close()
-        slack_repo.db.close()
+
 
 @celery_task.task
 def schedule_ten_minutes_before(**kwargs):
-    notion_slack_mapping_repo = NotionSlackMappingRepository(db=SessionLocal())
-    slack_repo = SlackRepository(db=SessionLocal())
+    notion_slack_mapping_repo = NotionSlackMappingRepository()
+    slack_repo = SlackRepository()
 
     try:
         page_id = kwargs.get('page_id')
@@ -104,6 +106,3 @@ def schedule_ten_minutes_before(**kwargs):
 
     except Exception as e:
         print(f"전송실패: {e}")
-    finally:
-        notion_slack_mapping_repo.db.close()
-        slack_repo.db.close()

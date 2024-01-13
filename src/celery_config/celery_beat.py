@@ -1,6 +1,6 @@
 from .celery_app import celery_task
 from datetime import timedelta 
-from api.service.save_meeting_facade import save_meeting_facade
+from .containers import MeetingContainer
 from decouple import config
 
 SCHEDULE_TIME_UNITS = config('SCHEDULE_TIME_UNITS')
@@ -16,4 +16,5 @@ celery_task.conf.beat_schedule = {
 
 @celery_task.task
 def schedule_meeting():
-    save_meeting_facade()
+    meeting_process = MeetingContainer.meeting_process()
+    meeting_process.save_meeting()
