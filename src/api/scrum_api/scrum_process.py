@@ -7,24 +7,30 @@ from .blocks.etc_blocks import *
 from .blocks.text_blocks import *
 
 class ScrumProcess:
-    def __init__(self, request_data: ScrumRequestDto):
-        self.__api_key = request_data.notion_api_key
-        self._database_id = request_data.notion_database_id
+    def __init__(self, notion_repository):
+        self._notion_repository = notion_repository
 
     async def create_scrum_in_notion(self, request_data: ScrumRequestDto):
-        headers, page_data = self._make_post(request_data)
+        headers, database_id = self._make_header(request_data.db_name)
+        page_data = self._make_post(request_data, database_id)
         async with ClientSession() as session:
             async with session.post('https://api.notion.com/v1/pages', headers=headers, data=json.dumps(page_data)) as response:
                 return await response.json()
-    
-    def _make_post(self, request_data: ScrumRequestDto):
+            
+    def _make_header(self, db_name: str):
+        notion_database = self._notion_repository.find_notion_database_by_name_with_notion(db_name)
+        api_key = notion_database.notion.notion_api_token
+        database_id = notion_database.notion_database_id
         headers = {
-            "Authorization": "Bearer " + self.__api_key,
-            "Content-Type": "application/json",
-            "Notion-Version": "2022-02-22"
-        }
+                    "Authorization": "Bearer " + api_key,
+                    "Content-Type": "application/json",
+                    "Notion-Version": "2022-02-22"
+            }
+        return headers, database_id
+
+    def _make_post(self, request_data: ScrumRequestDto, database_id: str):
         page_data = {
-        "parent": {"database_id": self._database_id},
+        "parent": {"database_id": database_id},
         "children": request_data.blocks,
         "properties": {
             "이름": {
@@ -64,7 +70,7 @@ class ScrumProcess:
             }
             }
         }
-        return headers, page_data
+        return page_data
 
 
     def _make_date(self, day, time):
