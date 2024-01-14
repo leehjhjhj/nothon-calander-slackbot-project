@@ -3,6 +3,8 @@ from .scrum_dto import ScrumRequestDto
 from datetime import datetime, timedelta, time as make_time
 import pytz
 from aiohttp import ClientSession
+from .blocks.etc_blocks import *
+from .blocks.text_blocks import *
 
 class ScrumProcess:
     def __init__(self, request_data: ScrumRequestDto):
@@ -23,7 +25,7 @@ class ScrumProcess:
         }
         page_data = {
         "parent": {"database_id": self._database_id},
-        "children": self._make_block(),
+        "children": request_data.blocks,
         "properties": {
             "이름": {
                 "title": [
@@ -87,59 +89,3 @@ class ScrumProcess:
         hour, minute = map(int, time.split(':')) 
         target_datetime = datetime.combine(target_date, make_time(hour=hour-9, minute=minute))
         return target_datetime.isoformat()
-    
-    def _make_block(self):
-        parts = ('기획', '관객 서버', '매니저 서버', '클라이언트', '디자인')
-        parts_block = [
-            {
-            "object": "block",
-            "type": "heading_2",
-            "heading_2": {
-                "rich_text": [
-                {
-                    "type": "text",
-                    "text": { "content": part }
-                }
-                ]
-            }
-        }
-            for part in parts
-        ]
-
-        return [
-            {
-            "object": "block",
-            "type": "heading_1",
-            "heading_1": {
-                "rich_text": [
-                {
-                    "type": "text",
-                    "text": { "content": "파트별 진행 상황 공유" }
-                }
-                ]
-            }
-        }] + parts_block + [
-        {
-            "object": "block",
-            "type": "heading_1",
-            "heading_1": {
-                "rich_text": [
-                {
-                    "type": "text",
-                    "text": { "content": "회고" }
-                }
-                ]
-            }
-        }] + [
-        {
-            "object": "block",
-            "type": "heading_1",
-            "heading_1": {
-                "rich_text": [
-                {
-                    "type": "text",
-                    "text": { "content": "다음 스프린트 목표" }
-                }
-                ]
-            }
-        }] + parts_block 
