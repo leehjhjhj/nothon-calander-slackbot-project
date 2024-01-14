@@ -7,3 +7,4 @@ class ScrumRequestDto(BaseModel):
     day: str = Field(..., example="금요일")
     time: str = Field(..., example="18:00")
     type: str = Field(..., example="비대면")
+    blocks: list[dict]
