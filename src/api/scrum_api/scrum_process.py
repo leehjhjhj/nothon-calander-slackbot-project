@@ -52,7 +52,7 @@ class ScrumProcess:
             "참여 파트": {
                 "multi_select": [
                     {
-                        "name": "전체"
+                        "name": request_data.part
                     }
                 ]
             },
