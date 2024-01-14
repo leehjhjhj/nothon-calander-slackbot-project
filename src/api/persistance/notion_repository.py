@@ -17,3 +17,12 @@ class NotionRepository:
                 return notion_database.notion.notion_api_token
             else:
                 return None
+            
+    def find_notion_database_by_name_with_notion(self, db_name: str):
+        with get_db() as db:
+            return (
+                db.query(NotionDatabase)
+                .options(joinedload(NotionDatabase.notion))  # Notion 객체를 조인
+                .filter(NotionDatabase.db_name == db_name)
+                .one()
+            )
