@@ -8,7 +8,7 @@ class ParticipantsProcess:
     def __init__(self, slack_repository, notion_slack_mapping_repository):
         self._slack_repo = slack_repository
         self._notion_slack_mapping_repo = notion_slack_mapping_repository
-        self._redis_conn = get_cache_redis_connection(db_select=1)
+        self._redis_conn = get_cache_redis_connection(db_select=3)
 
     def add_participants(self, meeting: NotionPage, result) -> NotionPage:
         participants = self._make_participants(result, meeting.notion_database_id)
