@@ -26,6 +26,8 @@ class MeetingProcess:
                 for result in results:
                     try:
                         meeting = self._farthing_calender_data(result)
+                        if not self._check_meeting_status(meeting.status):
+                            continue
                         if self._check_meeting_time(meeting.time) and not self._check_meeting_id(meeting.page_id, set_meeting_ids):
                             logging.info(f"{meeting.name}이 if에 들어왔다.")
                             meeting = self._participants_process.add_participants(meeting, result)
@@ -39,7 +41,7 @@ class MeetingProcess:
                         continue
         except Exception as e:
             logging.error(f"save meeting 자체 오류 발생!: {e}")
-    
+
     def _read_notion_database(self, notion_database_id, notion_api_key):
         token = notion_api_key
         database_id = notion_database_id
@@ -70,6 +72,11 @@ class MeetingProcess:
             name=properties.get("이름", {}).get("title", [{}])[0].get('text').get('content'),
         )
         return meeting
+
+    def _check_meeting_status(self, status):
+        if status == StatusChoice.CONFIRMED:
+            return True
+        return False
 
     def _check_meeting_id(self, target_id, meeting_ids):
         if target_id in meeting_ids:
