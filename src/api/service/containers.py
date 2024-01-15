@@ -15,6 +15,7 @@ class MeetingContainer(containers.DeclarativeContainer):
     participants_process = providers.Factory(
         ParticipantsProcess,
         slack_repository=slack_repository,
+        notion_slack_mapping_repository=notion_slack_mapping_repository,
     )
     meeting_process = providers.Factory(
         MeetingProcess,
