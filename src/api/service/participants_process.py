@@ -39,6 +39,7 @@ class ParticipantsProcess:
             name_user_id_map = json.loads(name_user_id_map_byte)
 
             for participants_name in participants_names:
+                print(name_user_id_map, participants_names, slack_channel_id, self._redis_conn)
                 user_id = name_user_id_map.get(f'{participants_name}', False)
                 if user_id:
                     mention += f"<@{user_id}> "
