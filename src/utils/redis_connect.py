@@ -6,7 +6,7 @@ def get_cache_redis_connection(db_select: int):
     redis_host = config('REDIS_CACHE_HOST')
     redis_port = config('REDIS_CACHE_PORT')
     redis_con = Redis(host=redis_host, port=redis_port, db=3)
-    print(redis_host, redis_port)
+    print(redis_host, redis_port, redis_con)
 
     try:
         if not redis_con.ping():
