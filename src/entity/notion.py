@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 class StatusChoice(enum.Enum):
     CONFIRMED = "확정"
     CANCELLED = "취소 및 변경"
+    UNDEFINED = "미정"
 
 class Notion(Base):
     __tablename__ = "notion"
