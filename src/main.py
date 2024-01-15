@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from api.scrum_api.question_controller import router
+from api.scrum_api import question_controller
+from api import meeting_controller
 app = FastAPI()
 
 
@@ -16,4 +17,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router)
+app.include_router(question_controller.router)
+app.include_router(meeting_controller.router)
