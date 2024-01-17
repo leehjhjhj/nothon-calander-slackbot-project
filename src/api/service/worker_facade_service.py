@@ -25,27 +25,20 @@ def worker_facade(meeting: NotionPage):
             "notion_database_id": meeting.notion_database_id,
             "participants": meeting.participants,
         }
-        reminder_time_one_day = meeting.time - timedelta(days=1)
-        one_day_uuid = make_uuid(meeting.page_id, "one_day")
-        res_one_day = AsyncResult(id=one_day_uuid, app=celery_task)
+        schedule_periods = [
+            {"period": "one_day", "delta": timedelta(days=1), "task": schedule_one_day_before},
+            {"period": "five_hours", "delta": timedelta(hours=5), "task": schedule_five_hours_before},
+            {"period": "ten_minutes", "delta": timedelta(minutes=10), "task": schedule_ten_minutes_before},
+        ]
 
-        reminder_time_five_hours = meeting.time - timedelta(hours=5)
-        five_hours_uuid = make_uuid(meeting.page_id, "five_hours")
-        res_five_hours = AsyncResult(id=one_day_uuid, app=celery_task)
+        for schedule in schedule_periods:
+            reminder_time = meeting.time - schedule["delta"]
+            uuid = make_uuid(meeting.page_id, schedule["period"])
+            res = AsyncResult(id=uuid, app=celery_task)
 
-        reminder_time_ten_minutes = meeting.time - timedelta(minutes=10)
-        ten_min_uuid = make_uuid(meeting.page_id, "ten_min")
-        res_ten_min = AsyncResult(id=ten_min_uuid, app=celery_task)
-        
-        if not res_one_day.ready():
-            schedule_one_day_before.apply_async(kwargs=extra, eta=reminder_time_one_day, task_id=one_day_uuid)
-        
-        if not res_five_hours.ready():
-            schedule_five_hours_before.apply_async(kwargs=extra, eta=reminder_time_five_hours, task_id=five_hours_uuid)
-
-        if not res_ten_min.ready():
-            schedule_ten_minutes_before.apply_async(kwargs=extra, eta=reminder_time_ten_minutes, task_id=ten_min_uuid)
+            if not res.ready():
+                schedule["task"].apply_async(kwargs=extra, eta=reminder_time, task_id=uuid)
 
     except Exception as e:
-        logging.error(f"에러 발생: {e}")
+        logging.error('Error in worker_facade', exc_info=e)
     
