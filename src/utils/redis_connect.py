@@ -3,8 +3,8 @@ from redis import Redis
 import logging
 
 def get_cache_redis_connection(db_select: int):
-    redis_host = config('REDIS_CACHE_HOST')
-    redis_port = config('REDIS_CACHE_PORT')
+    redis_host = 'redis_cache'
+    redis_port = 6380
     redis_con = Redis(host=redis_host, port=redis_port, db=db_select)
 
     try:
