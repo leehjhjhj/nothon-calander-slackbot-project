@@ -12,8 +12,6 @@ services:
     platform: linux/amd64
     env_file:
       - .env
-    depends_on:
-      - redis
   beat:
     image: 279381197488.dkr.ecr.ap-northeast-2.amazonaws.com/notion-slack-beat:latest
     build:
@@ -24,8 +22,6 @@ services:
     platform: linux/amd64
     env_file:
       - .env
-    depends_on:
-      - redis
   worker:
     image: 279381197488.dkr.ecr.ap-northeast-2.amazonaws.com/notion-slack-worker:latest
     build:
@@ -36,8 +32,6 @@ services:
     platform: linux/amd64
     env_file:
       - .env
-    depends_on:
-      - redis
   flower:
     image: 279381197488.dkr.ecr.ap-northeast-2.amazonaws.com/notion-slack-flower:latest
     build:
@@ -51,10 +45,5 @@ services:
     env_file:
       - .env
     depends_on:
-      - redis
       - worker 
-      - beat 
-  redis:
-    image: redis:latest
-    ports:
-        - "6379:6379"
+      - beat
