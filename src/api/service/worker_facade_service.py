@@ -9,7 +9,9 @@ def make_uuid(page_id, cmd):
     head = ''
     if cmd == "one_day":
         head = "1-day-"
-    elif cmd == "ten_min":
+    elif cmd == "five_hours":
+        head = "5-hours-"
+    elif cmd == "ten_minutes":
         head = "10-min-"
     return head + page_id
 
