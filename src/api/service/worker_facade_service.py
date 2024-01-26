@@ -35,6 +35,7 @@ def worker_facade(meeting: NotionPage):
 
         for schedule in schedule_periods:
             reminder_time = meeting.time - schedule["delta"]
+            extra["eta"] = reminder_time
             uuid = make_uuid(meeting.page_id, schedule["period"])
             res = AsyncResult(id=uuid, app=celery_task)
 
