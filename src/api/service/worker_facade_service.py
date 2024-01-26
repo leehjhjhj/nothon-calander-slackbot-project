@@ -4,6 +4,8 @@ from celery.result import AsyncResult
 from celery_config.celery_app import celery_task
 import logging
 from entity import NotionPage
+from datetime import datetime
+from pytz import timezone
 
 def make_uuid(page_id, cmd):
     head = ''
@@ -35,7 +37,8 @@ def worker_facade(meeting: NotionPage):
 
         for schedule in schedule_periods:
             reminder_time = meeting.time - schedule["delta"]
-            extra["eta"] = reminder_time
+            if reminder_time < datetime.now(tz=timezone('Asia/Seoul')):
+                continue
             uuid = make_uuid(meeting.page_id, schedule["period"])
             res = AsyncResult(id=uuid, app=celery_task)
 
@@ -44,4 +47,3 @@ def worker_facade(meeting: NotionPage):
 
     except Exception as e:
         logging.error('Error in worker_facade', exc_info=e)
-    

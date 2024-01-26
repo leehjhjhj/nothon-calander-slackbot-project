@@ -4,8 +4,6 @@ from api.persistance.slack_repository import SlackRepository
 from celery_config.celery_app import celery_task
 from api.persistance.meeting_repository import MeetingRepository
 from entity import StatusChoice
-from datetime import datetime
-from pytz import timezone
 
 def check_status(page_id: str):
     repo = MeetingRepository()
@@ -25,9 +23,6 @@ def schedule_one_day_before(**kwargs):
     notion_slack_mapping_repo = NotionSlackMappingRepository()
     slack_repo = SlackRepository()
     try:
-        eta = datetime.strptime(kwargs.get('page_id'), '%Y-%m-%dT%H:%M:%S.%f%z')
-        if eta < datetime.now(tz=timezone('Asia/Seoul')):
-            return
         page_id = kwargs.get('page_id')
         time = kwargs.get('time')
         name = kwargs.get('name')
@@ -59,9 +54,6 @@ def schedule_five_hours_before(**kwargs):
     notion_slack_mapping_repo = NotionSlackMappingRepository()
     slack_repo = SlackRepository()
     try:
-        eta = datetime.strptime(kwargs.get('page_id'), '%Y-%m-%dT%H:%M:%S.%f%z')
-        if eta < datetime.now(tz=timezone('Asia/Seoul')):
-            return
         page_id = kwargs.get('page_id')
         name = kwargs.get('name')
         meeting_url = kwargs.get('meeting_url')
@@ -93,9 +85,6 @@ def schedule_ten_minutes_before(**kwargs):
     slack_repo = SlackRepository()
 
     try:
-        eta = datetime.strptime(kwargs.get('page_id'), '%Y-%m-%dT%H:%M:%S.%f%z')
-        if eta < datetime.now(tz=timezone('Asia/Seoul')):
-            return
         page_id = kwargs.get('page_id')
         name = kwargs.get('name')
         meeting_url = kwargs.get('meeting_url')
