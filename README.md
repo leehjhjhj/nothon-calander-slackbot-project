@@ -12,26 +12,11 @@
 ## 🛠️ 기술 스택
 - 사용 스택:
   - Fastapi, Celery, Notion api, Slack sdk
-  - Aws ec2, rds, codedeploy, github actions, nginx, docker
-
-## 📀 ERD
-<img width="600" alt="image" src="https://github.com/leehjhjhj/nothon-calander-slackbot-project/assets/102458609/e00d664f-1561-49f7-b334-64238416fde9">
+  - Aws ec2, rds, codedeploy, lambda, eventbridge, github actions, nginx, docker
 
 ## 🤹‍♂️ 개발 내용 및 경험
-### Celery를 이용한 스케줄링
-celery beat와 worker를 사용하여 주기적으로 데이터베이스를 읽고, celery task 함수의 `appy_async`의 `eta`인자를 활용해서 알림 시간을 스케줄링 하였습니다.
-### 책임 분리
-최대한 function을 분리해서 코드가 너무 길어지지 않도록 노력했고, service, persistance, celery beat, worker을 분리해서 각 영억의 책임만 지도록 개발하였습니다.
-### 효율적인 개발을 위한 CICD 구축
-서비스를 위해 한번에 띄어야 될 컨테이너 수가 많은 만큼, docker compose를 사용하였으며, 쉬운 배포를 위해서 github acition을 이용한 CI를 구축하였습니다. CD에서 기존에 appleboy를 이용한 ssh를 이용한 ec2 인스턴스에 접속하는 방식이 아닌, Codedeploy를 사용해서 안정적인 배포가 이루어지도록 하였습니다.
-https://imasimdi.tistory.com/177
-
-### 확장성
-처음 코드는 하나의 데이터베이스에 하나의 채널에만 메시지를 보내지 못 했었습니다. 하지만 하나의 캘린더 데이터베이스에서 다수의 채널로 메시지를 보낼 수 있는 소요가 발생할 수 있다고 생각했습니다. 따라서 확장성을 높이기 위해서 NotionSlack 테이블을 추가하여 데이터베이스:슬랙 채널의 키 값 쌍의 관리만으로 재배포를 하지 않고 스케줄링이 가능하도록 하였습니다. 
-
-### 성장경험
-프로젝트 팀장을 맡으면서 '어떻게 하면 효율적으로 팀을 이끌어 나갈 수 있을까?' 를 고민하고 있었습니다. 여러번 프로젝트를 경험하면서, 소통에 있어서 '회의'를 효과적으로 이끌어 내는 것이 중요하다고 느꼈습니다. 하지만 일정을 빈번하게 잊어버리는 일도 잦고, 그렇게 되면 회의 주제나 미리 준비해야 하는 부분들을 팀원들이 놓치기 쉽상이었습니다. 따라서 원할한 프로젝트 진행을 위해서, 모든 알림은 slack에 집중시키고, 회의 알림을 slack 메시지로 보내서 팀원들로 하여금 프로젝트에 쉽게 집중할 수 있는 환경을 만들어주려고 노력하고 있습니다.
-
+https://velog.io/@leehjhjhj/효율적인-프로젝트를-위한-노션-슬랙-봇1-원리와-설계 <br>
+https://velog.io/@leehjhjhj/효율적인-프로젝트를-위한-노션-슬랙-봇2-고도화-페이지-자동-생성
 
 
 
